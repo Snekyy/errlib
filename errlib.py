@@ -1,3 +1,5 @@
+from scipy.stats import t
+
 pi = 3.141592653589793238462643383279502884197169399
 
 def mean(X):
@@ -50,7 +52,9 @@ def bestfit_linear_with_err(X, Y, X_err, Y_err):
 	b = (sum(valueXy)-a*sum(valueXx))/sum(value)
 
 	a_stdev, b_stdev = param_stdev(X, Y, a)
-	return a, b, a_stdev, b_stdev
+	a_err = a_stdev*t.ppf(1-0.05/2, n)
+	b_err = b_stdev*t.ppf(1-0.05/2, n)
+	return a, b, a_err, b_err
 
 
 def bestfit_hyperbolic(X, Y):
@@ -66,4 +70,3 @@ def bestfit_hyperbolic_with_err(X, Y, X_err, Y_err):
 	numerator = sum([value[i]*Y[i] for i in range(0, n)])
 	denumerator = sum([value[i]/X[i] for i in range(0, n)])
 	return numerator/denumerator
-	
